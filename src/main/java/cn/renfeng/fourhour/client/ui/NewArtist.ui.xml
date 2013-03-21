@@ -1,0 +1,44 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		
+	</ui:style>
+	<g:HTMLPanel>
+		<g:Grid>
+			<g:row>
+				<g:cell>First name</g:cell>
+				<g:customCell>
+					<g:TextBox ui:field="firstnameTextBox" />
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:cell>Last name</g:cell>
+				<g:customCell>
+					<g:TextBox ui:field="lastnameTextBox" />
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:cell>Gender</g:cell>
+				<g:customCell>
+					<g:HTMLPanel>
+						<g:RadioButton name="gender" checked="true">(Disclosed)</g:RadioButton>
+						<g:RadioButton name="gender" ui:field="maleRadioButton">Male</g:RadioButton>
+						<g:RadioButton name="gender" ui:field="femaleRadioButton">Female</g:RadioButton>
+					</g:HTMLPanel>
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:cell>Country</g:cell>
+				<g:customCell>
+					<g:ListBox ui:field="countryListBox">
+						<g:item >China</g:item>
+						<g:item>Singapore</g:item>
+						<g:item>US</g:item>
+					</g:ListBox>
+				</g:customCell>
+			</g:row>
+		</g:Grid>
+		<g:Button ui:field="addButton">Add</g:Button>
+	</g:HTMLPanel>
+</ui:UiBinder> 
