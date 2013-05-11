@@ -55,6 +55,81 @@
 			</plugin>
 
 			<!-- phase: process-classes -->
+			<plugin>
+				<groupId>org.datanucleus</groupId>
+				<artifactId>maven-datanucleus-plugin</artifactId>
+				<version>3.1.3</version>
+				<configuration>
+
+					<!-- required by schema-create -->
+					<!-- <props>${basedir}/src/main/resources/datanucleus-mysql.properties</props> -->
+
+					<!-- suppresses error: The command line is too long. -->
+					<!-- <metadataIncludes>**/*.jdo,**/*.orm,**/*.class</metadataIncludes> -->
+					<fork>false</fork>
+
+					<persistenceUnitName>transactions-optional</persistenceUnitName>
+
+					<!-- logging -->
+					<log4jConfiguration>${basedir}/src/main/resources/log4j.properties</log4jConfiguration>
+
+				</configuration>
+				<executions>
+					<execution>
+						<!-- hack to prevent eclipse from crashing on clean build -->
+						<!-- <phase>process-classes</phase> -->
+						<phase>test-compile</phase>
+						<goals>
+							<goal>enhance</goal>
+							<!-- <goal>schema-create</goal> -->
+							<!-- <goal>schema-delete</goal> -->
+
+							<!-- <goal>schema-validate</goal> -->
+							<!-- <goal>schema-info</goal> -->
+							<!-- <goal>schema-dbinfo</goal> -->
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.datanucleus</groupId>
+						<artifactId>datanucleus-api-jdo</artifactId>
+						<version>${datanucleus-api-jdo.version}</version>
+					</dependency>
+
+					<!-- required by schema-create -->
+
+					<dependency>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+						<version>${log4j.version}</version>
+					</dependency>
+
+					<!-- to prevent version check -->
+					<dependency>
+						<groupId>org.datanucleus</groupId>
+						<artifactId>datanucleus-core</artifactId>
+						<version>${datanucleus.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.datanucleus</groupId>
+						<artifactId>datanucleus-enhancer</artifactId>
+						<version>${datanucleus-enhancer.version}</version>
+					</dependency>
+					<!-- for datanucleus.version 3.1.1 -->
+					<dependency>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+						<version>4.1</version>
+					</dependency>
+					<dependency>
+						<groupId>javax.jdo</groupId>
+						<artifactId>jdo-api</artifactId>
+						<version>${jdo-api.version}</version>
+					</dependency>
+
+				</dependencies>
+			</plugin>
 
 			<!-- phase: test -->
 
@@ -142,27 +217,6 @@
 
 			<!-- phase: invoked manually -->
 			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat6-maven-plugin</artifactId>
-				<version>2.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>run-war-only</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-
-					<ajpPort>9005</ajpPort>
-					<!-- <httpsPort>8443</httpsPort> -->
-
-					<!-- https://issues.apache.org/jira/browse/MTOMCAT-175 -->
-					<warDirectory>${project.build.directory}/${project.build.finalName}</warDirectory>
-
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>com.google.appengine</groupId>
 				<artifactId>appengine-maven-plugin</artifactId>
 				<version>1.7.5</version>
@@ -180,101 +234,6 @@
 
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>3.1</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<!-- phase: process-classes -->
-					<plugin>
-						<groupId>org.datanucleus</groupId>
-						<artifactId>maven-datanucleus-plugin</artifactId>
-						<version>3.1.3</version>
-						<configuration>
-
-							<!-- required by schema-create -->
-							<!-- <props>${basedir}/src/main/resources/datanucleus-mysql.properties</props> -->
-
-							<!-- suppresses error: The command line is too long. -->
-							<!-- <metadataIncludes>**/*.jdo,**/*.orm,**/*.class</metadataIncludes> -->
-							<fork>false</fork>
-
-							<persistenceUnitName>transactions-optional</persistenceUnitName>
-
-							<!-- logging -->
-							<log4jConfiguration>${basedir}/src/main/resources/log4j.properties</log4jConfiguration>
-
-						</configuration>
-						<executions>
-							<execution>
-								<!-- hack to prevent eclipse from crashing on clean build -->
-								<!-- <phase>process-classes</phase> -->
-								<phase>test-compile</phase>
-								<goals>
-									<goal>enhance</goal>
-									<!-- <goal>schema-create</goal> -->
-									<!-- <goal>schema-delete</goal> -->
-
-									<!-- <goal>schema-validate</goal> -->
-									<!-- <goal>schema-info</goal> -->
-									<!-- <goal>schema-dbinfo</goal> -->
-								</goals>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>org.datanucleus</groupId>
-								<artifactId>datanucleus-api-jdo</artifactId>
-								<version>${datanucleus-api-jdo.version}</version>
-							</dependency>
-
-							<!-- required by schema-create -->
-
-							<dependency>
-								<groupId>log4j</groupId>
-								<artifactId>log4j</artifactId>
-								<version>${log4j.version}</version>
-							</dependency>
-
-							<!-- to prevent version check -->
-							<dependency>
-								<groupId>org.datanucleus</groupId>
-								<artifactId>datanucleus-core</artifactId>
-								<version>${datanucleus.version}</version>
-							</dependency>
-							<dependency>
-								<groupId>org.datanucleus</groupId>
-								<artifactId>datanucleus-enhancer</artifactId>
-								<version>${datanucleus-enhancer.version}</version>
-							</dependency>
-							<!-- for datanucleus.version 3.1.1 -->
-							<dependency>
-								<groupId>org.ow2.asm</groupId>
-								<artifactId>asm</artifactId>
-								<version>4.1</version>
-							</dependency>
-							<dependency>
-								<groupId>javax.jdo</groupId>
-								<artifactId>jdo-api</artifactId>
-								<version>${jdo-api.version}</version>
-							</dependency>
-
-						</dependencies>
-					</plugin>
-				</plugins>
-			</build>
-			<properties>
-				<datanucleus.version>3.1.3</datanucleus.version>
-				<datanucleus-api-jdo.version>3.1.3</datanucleus-api-jdo.version>
-				<datanucleus-enhancer.version>3.1.1</datanucleus-enhancer.version>
-				<datanucleus-jdo-query.version>3.0.2</datanucleus-jdo-query.version>
-			</properties>
-		</profile>
-	</profiles>
 
 	<dependencies>
 
@@ -337,29 +296,45 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- <dependency> <groupId>org.mockito</groupId> <artifactId>mockito-all</artifactId> 
+			<version>1.9.0</version> <scope>test</scope> </dependency> -->
 		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.0</version>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-testing</artifactId>
+			<version>${appengine.target.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>com.google.appengine</groupId> <artifactId>appengine-testing</artifactId> 
-			<version>${appengine.target.version}</version> <scope>test</scope> </dependency> -->
-		<!-- <dependency> <groupId>com.google.appengine</groupId> <artifactId>appengine-api-stubs</artifactId> 
-			<version>${appengine.target.version}</version> <scope>test</scope> </dependency> -->
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-stubs</artifactId>
+			<version>${appengine.target.version}</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
 	<properties>
+
 		<appengine.app.version>1</appengine.app.version>
 		<appengine.target.version>1.7.5</appengine.target.version>
+
 		<context>/</context>
+
+		<datanucleus.version>3.1.3</datanucleus.version>
+		<datanucleus-api-jdo.version>3.1.3</datanucleus-api-jdo.version>
+		<datanucleus-enhancer.version>3.1.1</datanucleus-enhancer.version>
+		<datanucleus-jdo-query.version>3.0.2</datanucleus-jdo-query.version>
+
 		<gwt.module>cn.renfeng.fourhour.FourHour</gwt.module>
 		<gwt.version>2.5.0</gwt.version>
+
 		<jdo-api.version>3.0.1</jdo-api.version>
+
 		<log4j.version>1.2.17</log4j.version>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
 	</properties>
 
 </project>
